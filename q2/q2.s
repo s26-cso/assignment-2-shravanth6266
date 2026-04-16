@@ -1,6 +1,6 @@
 .section .rodata
 printing_format: .string "%lld "
-newline: .string "\n"
+newline: .string "%lld\n"
 
 .global main
 
@@ -108,7 +108,7 @@ push:
 
 print:
     li s2, 0
-    addi s0, s0, -1
+    addi s0, s0, -2
 
 printloop:
     bge s2, s0, exitprintloop
@@ -124,10 +124,15 @@ printloop:
     j printloop
 
 exitprintloop:
+    slli t0, s2, 3
+    add t1, s6, t0
+    ld a1, 0(t1)
+
     lla a0, newline
     call printf
 
 exit:
+    li a0, 0
     ld s6, 0(sp)
     ld s5, 8(sp)
     ld s4, 16(sp)
